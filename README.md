@@ -46,28 +46,40 @@ Muốn bật sẵn không qua menu thì thêm vào `~/.claude/settings.json`:
 { "outputStyle": "giai-thich-de-hieu" }
 ```
 
-**Bước 3 — chỉ dành cho người đã cài plugin `explanatory-output-style`.** Hầu hết mọi người bỏ qua
-bước này: plugin đó không có sẵn, phải tự đi cài mới có. Kiểm bằng:
+**Bước 3 — chạy một lệnh kiểm, hầu hết mọi người sẽ bỏ qua được:**
 
 ```bash
 claude plugin list
 ```
 
-Nếu thấy `explanatory-output-style@claude-plugins-official` với `Status: ✔ enabled` thì tắt nó:
+Nếu **không** thấy dòng `explanatory-output-style@claude-plugins-official` thì xong, bỏ qua phần còn
+lại. Nếu thấy nó kèm `Status: ✔ enabled` thì tắt đi:
 
 ```bash
 claude plugin disable explanatory-output-style@claude-plugins-official
 ```
 
-Vì sao: plugin đó **không** chặn file này — file vẫn nạp, vẫn được chọn bình thường. Nhưng nó bơm thêm
-một lời dặn **ngược lại**, rằng lúc nào cũng phải có ô Insight. Để cả hai thì bạn mất đúng cái cải
-tiến chính, ô Insight quay về kiểu viết lấy lệ mỗi lượt.
+### Cẩn thận: có HAI thứ cùng tên "Explanatory"
 
-Đã kiểm nội dung plugin đó: nó chỉ gồm một hook lúc-mở-phiên, không có file style nào và không có cờ
-`force-for-plugin`, nên nó không đè được lựa chọn output style của bạn. Chỉ là hai lời dặn đánh nhau.
+Đây là chỗ dễ lẫn nhất, kể cả với người đã dùng Claude Code lâu.
 
-Còn style **Explanatory** có sẵn trong Claude Code thì không phải lo — các output style loại trừ nhau,
-chọn cái này là thay cái đó.
+|                   | Style **Explanatory** có sẵn                                        | Plugin **`explanatory-output-style`**     |
+| :---------------- | :------------------------------------------------------------------ | :---------------------------------------- |
+| Ở đâu ra          | dựng sẵn trong Claude Code, cài là có                               | phải tự vào `/plugin` cài mới có          |
+| Có phá style này? | **không** — các output style loại trừ nhau, chọn cái này là thay nó | **có** — nó chạy song song, không bị thay |
+| Cần làm gì        | không cần làm gì cả                                                 | tắt đi                                    |
+
+Claude Code **tự thêm cửa hàng plugin chính thức** lúc khởi động, nên nhiều người tưởng plugin trong đó
+cũng được cài sẵn. Tài liệu nói rõ là không: thêm cửa hàng chỉ để xem catalog, _"chưa có plugin nào
+được cài"_. Ai đang có plugin đó là đã từng tự bấm cài.
+
+Vì sao plugin đó phá: nó **không** chặn file này — file vẫn nạp, vẫn được chọn bình thường. Nhưng nó
+bơm thêm một lời dặn **ngược lại**, rằng lúc nào cũng phải có ô Insight. Để cả hai thì bạn mất đúng cái
+cải tiến chính, ô Insight quay về kiểu viết lấy lệ mỗi lượt.
+
+Đã đọc nội dung plugin đó để chắc: nó chỉ gồm **một hook lúc-mở-phiên**, không có file style nào và
+không có cờ `force-for-plugin`, nên nó không đè được lựa chọn output style của bạn. Chỉ là hai lời dặn
+đánh nhau — mà lời dặn của nó ở ngoài tầm với của file này, nên phải tắt từ gốc.
 
 ## Hai dòng bạn cần sửa cho mình
 
@@ -98,13 +110,6 @@ phải style hỏng.
 lược bỏ — nó vào thẳng phần chỉ dẫn của Claude, nguyên văn, ở mọi phiên. Đo được: bản trước của file
 này có một khối comment 6 dòng và nó xuất hiện đủ cả 6 dòng. Vì vậy mọi lời dặn cho người bảo trì nằm
 ở README này, còn file style chỉ giữ đúng phần Claude cần đọc.
-
-**Đừng bật cùng plugin `explanatory-output-style` của Anthropic.** Hai bên dặn ngược nhau về việc "lúc
-nào cũng phải có ô Insight". Tắt nó đi:
-
-```bash
-claude plugin disable explanatory-output-style@claude-plugins-official
-```
 
 ## Vài lựa chọn cố ý
 
