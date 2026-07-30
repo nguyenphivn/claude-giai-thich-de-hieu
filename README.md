@@ -25,7 +25,7 @@ bỏ trống"**.
 
 ## Cài
 
-Một lệnh:
+Hai bước. Không có bước ba.
 
 **Bước 1 — tải file về:**
 
@@ -46,40 +46,42 @@ Muốn bật sẵn không qua menu thì thêm vào `~/.claude/settings.json`:
 { "outputStyle": "giai-thich-de-hieu" }
 ```
 
-**Bước 3 — chạy một lệnh kiểm, hầu hết mọi người sẽ bỏ qua được:**
+### Cẩn thận: có HAI thứ cùng tên "Explanatory"
 
-```bash
-claude plugin list
-```
+Đây là chỗ dễ lẫn nhất, kể cả với người đã dùng Claude Code lâu.
 
-Nếu **không** thấy dòng `explanatory-output-style@claude-plugins-official` thì xong, bỏ qua phần còn
-lại. Nếu thấy nó kèm `Status: ✔ enabled` thì tắt đi:
+|                   | Style **Explanatory** có sẵn                                        | Plugin **`explanatory-output-style`**            |
+| :---------------- | :------------------------------------------------------------------ | :----------------------------------------------- |
+| Ở đâu ra          | dựng sẵn trong Claude Code, cài là có                               | phải tự vào `/plugin` cài mới có                 |
+| Có phá style này? | **không** — các output style loại trừ nhau, chọn cái này là thay nó | **không**, đã đo — nhưng nó tốn chỗ mỗi phiên    |
+| Cần làm gì        | không cần làm gì cả                                                 | tắt nếu bạn không dùng nó, cho gọn               |
+
+Claude Code **tự thêm cửa hàng plugin chính thức** lúc khởi động, nên nhiều người tưởng plugin trong đó
+cũng được cài sẵn. Tài liệu nói rõ là không: thêm cửa hàng chỉ để xem catalog, _"chưa có plugin nào được
+cài"_. Ai đang có plugin đó là đã từng tự bấm cài.
+
+### Có cần tắt plugin đó không
+
+**Không bắt buộc.** Câu này đã đo, không phải suy luận — vì suy luận ban đầu đã sai.
+
+Bật file style lên rồi chạy cùng một việc hai lần, một lần có plugin một lần không. Kết quả gần như y
+hệt, và **cả hai lần đều không đẻ ra ô Insight thừa**. Thử cả hai loại việc: một câu cần khuyên chọn, và
+một việc **viết code thật** — chỗ sau là chỗ plugin lẽ ra phải nổ, vì chữ của nó ghi rõ _"trước và sau
+khi viết code, lúc nào cũng phải..."_.
+
+Kèm đối chứng để phép thử không mù: hỏi thẳng Claude xem đoạn chữ tiếng Anh của plugin có nằm trong chỉ
+dẫn không. Có cờ nạp plugin thì nó trả lời có, không cờ thì không. Nên plugin **thật sự đã nạp** lúc đo,
+chứ không phải "không thấy tác dụng vì nó chưa bao giờ ở đó".
+
+Vẫn có một lý do để tắt, nhưng là lý do **tốn kém**, không phải lý do sai: plugin đó bơm **1.192 byte
+(140 từ)** vào mọi phiên, dặn những điều file này đã dặn — mà còn dặn ngược ở đúng một điểm ("lúc nào
+cũng phải có ô Insight" so với "không có gì đáng nói thì bỏ trống"). Không dùng thì tắt cho gọn:
 
 ```bash
 claude plugin disable explanatory-output-style@claude-plugins-official
 ```
 
-### Cẩn thận: có HAI thứ cùng tên "Explanatory"
-
-Đây là chỗ dễ lẫn nhất, kể cả với người đã dùng Claude Code lâu.
-
-|                   | Style **Explanatory** có sẵn                                        | Plugin **`explanatory-output-style`**     |
-| :---------------- | :------------------------------------------------------------------ | :---------------------------------------- |
-| Ở đâu ra          | dựng sẵn trong Claude Code, cài là có                               | phải tự vào `/plugin` cài mới có          |
-| Có phá style này? | **không** — các output style loại trừ nhau, chọn cái này là thay nó | **có** — nó chạy song song, không bị thay |
-| Cần làm gì        | không cần làm gì cả                                                 | tắt đi                                    |
-
-Claude Code **tự thêm cửa hàng plugin chính thức** lúc khởi động, nên nhiều người tưởng plugin trong đó
-cũng được cài sẵn. Tài liệu nói rõ là không: thêm cửa hàng chỉ để xem catalog, _"chưa có plugin nào
-được cài"_. Ai đang có plugin đó là đã từng tự bấm cài.
-
-Vì sao plugin đó phá: nó **không** chặn file này — file vẫn nạp, vẫn được chọn bình thường. Nhưng nó
-bơm thêm một lời dặn **ngược lại**, rằng lúc nào cũng phải có ô Insight. Để cả hai thì bạn mất đúng cái
-cải tiến chính, ô Insight quay về kiểu viết lấy lệ mỗi lượt.
-
-Đã đọc nội dung plugin đó để chắc: nó chỉ gồm **một hook lúc-mở-phiên**, không có file style nào và
-không có cờ `force-for-plugin`, nên nó không đè được lựa chọn output style của bạn. Chỉ là hai lời dặn
-đánh nhau — mà lời dặn của nó ở ngoài tầm với của file này, nên phải tắt từ gốc.
+Xem mình có nó hay không bằng `claude plugin list`.
 
 ## Hai dòng bạn cần sửa cho mình
 
