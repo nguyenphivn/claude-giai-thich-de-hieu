@@ -1,11 +1,16 @@
-# giai-thich-de-hieu
+# claude-giai-thich-de-hieu
 
 Một **output style** cho Claude Code: bắt Claude giải thích công việc bằng **tiếng Việt thường, cho
-người không code** — dẫn bằng kết quả trước, không ký hiệu, không bảng dày, và chỉ giải thích khi thật
-sự có gì để giải thích.
+người không rành code** — dẫn bằng kết quả trước, không ký hiệu, không bảng dày, và chỉ giải thích khi
+thật sự có gì để giải thích.
 
-Viết cho hoàn cảnh này: bạn là chủ doanh nghiệp hoặc quản lý sản phẩm, bạn thuê Claude viết code, và
-bạn cần hiểu **nó vừa làm gì và vì sao** mà không phải học nghề lập trình.
+Viết cho người **vibecode**: bạn có ý tưởng, bạn để Claude viết code, và bạn cần hiểu **nó vừa làm gì
+và vì sao** — chứ không phải học nghề lập trình để đọc nổi câu trả lời.
+
+Mặc định, Claude trả lời như đang nói với một đồng nghiệp lập trình: nhãn `AF-0012`, bảng năm cột, "định
+tuyến", "bề mặt", "over-scoped". Nó không sai, nhưng bạn đọc xong vẫn không biết **nó vừa làm gì cho
+mình**. Style này bắt nó nói bằng tiếng của bạn — mà vẫn giữ nguyên phần giải thích **vì sao**, chứ
+không rút gọn thành "đã xong".
 
 |                    | Mặc định                                               | Với style này                                                                |
 | :----------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------- |
@@ -22,13 +27,18 @@ bỏ trống"**.
 
 Một lệnh:
 
+**Bước 1 — tải file về:**
+
 ```bash
 mkdir -p ~/.claude/output-styles && curl -fsSL -o ~/.claude/output-styles/giai-thich-de-hieu.md \
-  https://raw.githubusercontent.com/nguyenphivn/giai-thich-de-hieu/main/giai-thich-de-hieu.md
+  https://raw.githubusercontent.com/nguyenphivn/claude-giai-thich-de-hieu/main/giai-thich-de-hieu.md
 ```
 
-Rồi chạy `/config` trong Claude Code, chọn **Output style** → `giai-thich-de-hieu`. Có hiệu lực từ
-`/clear` hoặc phiên sau, vì output style là phần chỉ dẫn Claude chỉ đọc một lần lúc mở phiên.
+⚑ **Giữ nguyên tên file.** Tên file _chính là_ tên style. Xem cái bẫy đầu tiên bên dưới.
+
+**Bước 2 — bật nó lên.** Chạy `/config` trong Claude Code, chọn **Output style** →
+`giai-thich-de-hieu`. Có hiệu lực từ `/clear` hoặc phiên sau, vì output style là phần chỉ dẫn Claude
+chỉ đọc một lần lúc mở phiên.
 
 Muốn bật sẵn không qua menu thì thêm vào `~/.claude/settings.json`:
 
@@ -36,14 +46,37 @@ Muốn bật sẵn không qua menu thì thêm vào `~/.claude/settings.json`:
 { "outputStyle": "giai-thich-de-hieu" }
 ```
 
-⚑ **Giữ nguyên tên file.** Tên file _chính là_ tên style. Xem cái bẫy đầu tiên bên dưới.
+**Bước 3 — chỉ dành cho người đã cài plugin `explanatory-output-style`.** Hầu hết mọi người bỏ qua
+bước này: plugin đó không có sẵn, phải tự đi cài mới có. Kiểm bằng:
+
+```bash
+claude plugin list
+```
+
+Nếu thấy `explanatory-output-style@claude-plugins-official` với `Status: ✔ enabled` thì tắt nó:
+
+```bash
+claude plugin disable explanatory-output-style@claude-plugins-official
+```
+
+Vì sao: plugin đó **không** chặn file này — file vẫn nạp, vẫn được chọn bình thường. Nhưng nó bơm thêm
+một lời dặn **ngược lại**, rằng lúc nào cũng phải có ô Insight. Để cả hai thì bạn mất đúng cái cải
+tiến chính, ô Insight quay về kiểu viết lấy lệ mỗi lượt.
+
+Đã kiểm nội dung plugin đó: nó chỉ gồm một hook lúc-mở-phiên, không có file style nào và không có cờ
+`force-for-plugin`, nên nó không đè được lựa chọn output style của bạn. Chỉ là hai lời dặn đánh nhau.
+
+Còn style **Explanatory** có sẵn trong Claude Code thì không phải lo — các output style loại trừ nhau,
+chọn cái này là thay cái đó.
 
 ## Hai dòng bạn cần sửa cho mình
 
 Mở `~/.claude/output-styles/giai-thich-de-hieu.md`, mục **"Người đọc — sửa hai dòng này cho mình"**:
 
-- **Người đọc là ai.** Mặc định là "chủ tiệm kiêm quản lý sản phẩm". Đổi thành đúng vai của bạn —
-  càng cụ thể càng tốt. Đây là thứ điều khiển toàn bộ giọng điệu; để chung chung là style yếu đi.
+- **Người đọc là ai.** File điền mặc định là "chủ tiệm kiêm quản lý sản phẩm" — đổi thành đúng vai của
+  bạn. Ví dụ: "người tự dựng sản phẩm bằng AI, hiểu ý tưởng nhưng không viết code", "nhà thiết kế đang
+  tự làm app", "người làm marketing tự sửa website". Càng **cụ thể** càng tốt: đây là thứ điều khiển
+  toàn bộ giọng điệu, để chung chung kiểu "người không biết code" là style yếu đi rõ rệt.
 - **Xưng hô.** Mặc định gọi bạn là "anh", Claude tự xưng "em". Đổi thành "chị/em", "bạn/mình", hay bất
   cứ cặp nào bạn muốn.
 
