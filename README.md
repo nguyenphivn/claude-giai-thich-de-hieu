@@ -157,6 +157,19 @@ claude -p "<câu hỏi>" --setting-sources project,local --settings '{"outputSty
 tự, cả hai lần chạy sẽ giống nhau và bạn sẽ tưởng file này vô dụng. Lần đo đầu tiên khi làm repo này
 đã dính đúng lỗi đó.
 
+### Ô Insight vẫn chạy từ một file, không cần plugin
+
+Bản trước của bộ này nằm ở **hai chỗ**: file style, cộng một thư mục plugin riêng trong
+`~/.claude/skills/` chứa hook bơm phần ô Insight. Bản này gộp cả hai vào một file, nên câu hỏi hợp lý
+là: gộp xong thì ô Insight còn hoạt động không?
+
+Đã đo: đặt **một file này** vào một thư mục trống, cắt hết tầng cấu hình cá nhân, không plugin nào — rồi
+giao một việc có bẫy thật (chọn kiểu số để tính tiền). Ô `★ Insight` xuất hiện đúng chỗ, nội dung giải
+thích vì sao `0.1` không bao giờ đúng là một hào, bằng lời thường.
+
+Ngược lại, mấy việc máy móc trong cùng đợt đo — tạo một file in ra "Xin chào" — thì **không** ra ô nào.
+Đó là điều kiện "không có gì đáng nói thì bỏ trống" chạy đúng, chứ không phải ô bị hỏng.
+
 Chọn câu hỏi cho đúng cũng quan trọng. Một câu quá dễ ("index là gì?") thì hai bên trả lời y hệt, vì
 style không có chỗ nào để lộ ra. Cần câu **buộc phải xưng hô và buộc phải khuyên chọn**.
 
