@@ -88,6 +88,35 @@ bạn vừa sửa.
 kết quả trước, danh sách cấm, khối bốn bước khi cần người đọc quyết định, mục trung thực — không phụ
 thuộc tiếng Việt.
 
+## Có tác dụng thật không
+
+Đo được, không phải tự khen. Cùng một câu hỏi — _"Tôi nên dùng PostgreSQL hay MySQL cho tiệm sửa điện
+thoại của tôi?"_ — chạy hai lần, điều kiện giống nhau hoàn toàn, khác duy nhất ở chỗ có file này hay
+không:
+
+|                 | Không có file                                                                            | Có file                                                                                    |
+| :-------------- | :--------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| Xưng hô         | "bạn"                                                                                    | "anh" / "em"                                                                               |
+| Thuật ngữ       | `NUMERIC`, "silent truncation", `CHECK constraint`, `EXCLUDE`, `JSONB`, "Prisma/Drizzle" | không một mã nào; `JSONB` được dịch thành "một ô dạng ghi chú có cấu trúc mà vẫn tìm được" |
+| Ví dụ           | "lịch hẹn, tồn kho linh kiện"                                                            | "iPhone thì IMEI, laptop thì số serial, máy cũ thì ghi chú tình trạng vỏ"                  |
+| Kết câu trả lời | thêm một đề xuất thứ ba không ai hỏi (SQLite)                                            | **một** câu hỏi rõ ràng để chốt                                                            |
+
+Tự kiểm lại được. Đặt file vào `.claude/output-styles/` của một thư mục trống rồi chạy hai lệnh này —
+cờ `--setting-sources project,local` cắt tầng cấu hình cá nhân, để kết quả không bị chính cấu hình của
+bạn làm nhiễu:
+
+```bash
+claude -p "<câu hỏi>" --setting-sources project,local
+claude -p "<câu hỏi>" --setting-sources project,local --settings '{"outputStyle":"giai-thich-de-hieu"}'
+```
+
+⚑ Bỏ cờ đó ra là phép thử **mất giá trị**: nếu máy bạn đang có một hook lúc-mở-phiên bơm giọng tương
+tự, cả hai lần chạy sẽ giống nhau và bạn sẽ tưởng file này vô dụng. Lần đo đầu tiên khi làm repo này
+đã dính đúng lỗi đó.
+
+Chọn câu hỏi cho đúng cũng quan trọng. Một câu quá dễ ("index là gì?") thì hai bên trả lời y hệt, vì
+style không có chỗ nào để lộ ra. Cần câu **buộc phải xưng hô và buộc phải khuyên chọn**.
+
 ## Ghi công
 
 Hình thức ô `★ Insight` lấy từ style **Explanatory** của Claude Code (Anthropic) và plugin
