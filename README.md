@@ -73,6 +73,9 @@ Kèm đối chứng để phép thử không mù: hỏi thẳng Claude xem đo�
 dẫn không. Có cờ nạp plugin thì nó trả lời có, không cờ thì không. Nên plugin **thật sự đã nạp** lúc đo,
 chứ không phải "không thấy tác dụng vì nó chưa bao giờ ở đó".
 
+Đo hai đường độc lập, cùng một kết quả: một lần nạp plugin bằng cờ tạm cho đúng một lần chạy, một lần
+bật nó thật trong cấu hình rồi mở phiên mới. Cả hai đều không thấy ô Insight thừa.
+
 Vẫn có một lý do để tắt, nhưng là lý do **tốn kém**, không phải lý do sai: plugin đó bơm **1.192 byte
 (140 từ)** vào mọi phiên, dặn những điều file này đã dặn — mà còn dặn ngược ở đúng một điểm ("lúc nào
 cũng phải có ô Insight" so với "không có gì đáng nói thì bỏ trống"). Không dùng thì tắt cho gọn:
