@@ -1,27 +1,57 @@
 # claude-giai-thich-de-hieu
 
-Một **output style** cho Claude Code: bắt Claude giải thích công việc bằng **tiếng Việt thường, cho
-người không rành code** — dẫn bằng kết quả trước, không ký hiệu, không bảng dày, và chỉ giải thích khi
-thật sự có gì để giải thích.
+Một file để Claude Code nói chuyện với mình bằng tiếng người.
 
-Viết cho người **vibecode**: bạn có ý tưởng, bạn để Claude viết code, và bạn cần hiểu **nó vừa làm gì
-và vì sao** — chứ không phải học nghề lập trình để đọc nổi câu trả lời.
+## Chuyện là thế này
 
-Mặc định, Claude trả lời như đang nói với một đồng nghiệp lập trình: nhãn `AF-0012`, bảng năm cột, "định
-tuyến", "bề mặt", "over-scoped". Nó không sai, nhưng bạn đọc xong vẫn không biết **nó vừa làm gì cho
-mình**. Style này bắt nó nói bằng tiếng của bạn — mà vẫn giữ nguyên phần giải thích **vì sao**, chứ
-không rút gọn thành "đã xong".
+Mình không phải lập trình viên. Mình có ý tưởng, mình để Claude viết code — cái mà bây giờ người ta gọi
+là vibecode.
 
-|                    | Mặc định                                               | Với style này                                                                |
-| :----------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------- |
-| Mở đầu câu trả lời | mô tả cách làm, kết quả nằm cuối                       | **kết quả trước**, giải thích sau                                            |
-| Khi cần bạn quyết  | liệt kê phương án bằng thuật ngữ                       | mỗi cách được gì mất gì bằng lời, kèm đề xuất, rồi **một** câu hỏi           |
-| Nhãn, bảng, khung  | `D1`, `AF-0012`, bảng năm cột, khung trang trí tự phát | cấm — trừ ô `★ Insight`                                                      |
-| Ô `★ Insight`      | (style Explanatory) **mỗi lượt**                       | chỉ khi có đánh đổi thật, điều bất ngờ, hoặc số đo lật ngược điều tưởng đúng |
+Rồi vấn đề đến: Claude làm xong, báo lại, mà mình đọc không hiểu gì.
 
-Dòng cuối là khác biệt đáng kể nhất. Chữ _"always"_ trong style Explanatory gốc chính là thứ đẻ ra
-những ô Insight viết lấy lệ; ở đây nó được thay bằng điều kiện, và có câu **"không có gì đáng nói thì
-bỏ trống"**.
+Nó viết đại khái kiểu này:
+
+> Đã refactor `RepairOrderService` để inject `PricingStrategy` qua constructor, loại bỏ coupling với
+> concrete implementation. Bổ sung guard `assertSameBranch` trước mutation. AF-0012 resolved.
+>
+> | Trục | Trước | Sau | Delta | Rủi ro còn lại |
+> | ---- | ----- | --- | ----- | -------------- |
+> | D1   | ...   | ... | ...   | ...            |
+
+Nó không sai một chữ nào. Nó đang nói chuyện với một đồng nghiệp lập trình. Chỉ có điều mình không phải
+đồng nghiệp đó.
+
+Mình thử nhắc: "giải thích dễ hiểu hơn đi". Được đúng một lượt. Lượt sau nó quay về như cũ. Hôm sau mở
+máy lên lại phải nhắc lại từ đầu.
+
+Cái mất mát thật không phải là đọc mệt. Là mình **không biết nó vừa làm gì cho sản phẩm của mình**, nên
+không biết cái nào nên đồng ý và cái nào nên chặn lại.
+
+## Nên mình làm cái này
+
+Claude Code có một thứ gọi là **output style** — một file văn bản mà nó đọc mỗi lần mở phiên, để biết
+nên nói chuyện theo kiểu nào. Nhắc bằng miệng thì trôi; ghi vào file thì nó nhớ mãi.
+
+Mình viết một file như vậy. Nội dung, nói gọn:
+
+- Kể **kết quả trước**, giải thích sau. Đừng bắt mình đọc hết mới biết chuyện gì xảy ra.
+- Từ chuyên ngành nào buộc phải dùng thì **dịch ngay trong cùng câu**.
+- Cấm mấy thứ làm mình choáng: nhãn `AF-0012`, bảng năm cột, "định tuyến", "bề mặt", "over-scoped".
+- Nhưng **vẫn phải giải thích vì sao**. Đây là chỗ mình cẩn thận nhất — mình muốn dễ hiểu, không muốn bị
+  rút gọn thành "đã xong nhé".
+- Khi cần mình quyết: nói có mấy cách, mỗi cách được gì mất gì, **nghiêng về cách nào**, rồi hỏi đúng
+  một câu. Việc nào xoá dữ liệu hay mất tiền thì nói thẳng ra trước.
+- Chưa kiểm chứng được thì nói là chưa kiểm chứng được. Đừng đoán rồi nói như thật.
+
+Kết quả là Claude trả lời kiểu này:
+
+> **PostgreSQL.** Với tiệm sửa điện thoại thì chọn nó, không cần phân vân lâu.
+>
+> **Tiền phải chính xác.** MySQL ở cấu hình mặc định có thể âm thầm làm tròn hoặc cắt bớt số sai kiểu —
+> nhập số tiền quá dài thì nó tự cắt rồi vẫn báo "lưu xong". PostgreSQL báo lỗi ngay. Với sổ tiền công,
+> tiền linh kiện, thà bị chặn còn hơn sai ngầm.
+
+Cùng một câu hỏi, cùng một cái máy. Chỉ khác một file.
 
 ## Cài
 
@@ -34,148 +64,131 @@ mkdir -p ~/.claude/output-styles && curl -fsSL -o ~/.claude/output-styles/giai-t
   https://raw.githubusercontent.com/nguyenphivn/claude-giai-thich-de-hieu/main/giai-thich-de-hieu.md
 ```
 
-⚑ **Giữ nguyên tên file.** Tên file _chính là_ tên style. Xem cái bẫy đầu tiên bên dưới.
+**Bước 2 — bật lên.** Trong Claude Code chạy `/config`, chọn **Output style** → `giai-thich-de-hieu`.
 
-**Bước 2 — bật nó lên.** Chạy `/config` trong Claude Code, chọn **Output style** →
-`giai-thich-de-hieu`. Có hiệu lực từ `/clear` hoặc phiên sau, vì output style là phần chỉ dẫn Claude
-chỉ đọc một lần lúc mở phiên.
+Có hiệu lực từ `/clear` hoặc lần mở tiếp theo, vì file này chỉ được đọc một lần lúc mở phiên. Đừng thấy
+nó nói y như cũ mà tưởng hỏng.
 
-Muốn bật sẵn không qua menu thì thêm vào `~/.claude/settings.json`:
+Muốn khỏi vào menu thì thêm dòng này vào `~/.claude/settings.json`:
 
 ```json
 { "outputStyle": "giai-thich-de-hieu" }
 ```
 
-### Cẩn thận: có HAI thứ cùng tên "Explanatory"
+⚑ **Giữ nguyên tên file.** Tên file chính là tên style. Đổi tên là đổi luôn thứ phải chọn trong
+`/config`.
 
-Đây là chỗ dễ lẫn nhất, kể cả với người đã dùng Claude Code lâu.
+## Hai dòng bạn nên sửa cho mình
 
-|                   | Style **Explanatory** có sẵn                                        | Plugin **`explanatory-output-style`**            |
-| :---------------- | :------------------------------------------------------------------ | :----------------------------------------------- |
-| Ở đâu ra          | dựng sẵn trong Claude Code, cài là có                               | phải tự vào `/plugin` cài mới có                 |
-| Có phá style này? | **không** — các output style loại trừ nhau, chọn cái này là thay nó | **không**, đã đo — nhưng nó tốn chỗ mỗi phiên    |
-| Cần làm gì        | không cần làm gì cả                                                 | tắt nếu bạn không dùng nó, cho gọn               |
+Mở file vừa tải, ngay đầu có mục **"Người đọc — sửa hai dòng này cho mình"**.
 
-Claude Code **tự thêm cửa hàng plugin chính thức** lúc khởi động, nên nhiều người tưởng plugin trong đó
-cũng được cài sẵn. Tài liệu nói rõ là không: thêm cửa hàng chỉ để xem catalog, _"chưa có plugin nào được
-cài"_. Ai đang có plugin đó là đã từng tự bấm cài.
+**Dòng thứ nhất: bạn là ai.** Mình để mặc định là "chủ tiệm kiêm quản lý sản phẩm" vì đó là mình. Bạn
+đổi thành vai của bạn — "người tự dựng sản phẩm bằng AI, hiểu ý tưởng nhưng không viết code", "nhà thiết
+kế đang tự làm app", "người làm marketing tự sửa website".
 
-### Có cần tắt plugin đó không
+Càng cụ thể càng tốt. Đây là dòng điều khiển cả cái giọng, và mình đã thử: viết chung chung kiểu "người
+không biết code" thì style yếu đi rõ rệt, vì Claude không hình dung được đang nói với ai.
 
-**Không bắt buộc.** Câu này đã đo, không phải suy luận — vì suy luận ban đầu đã sai.
+**Dòng thứ hai: xưng hô.** Mặc định gọi bạn là "anh", Claude tự xưng "em". Đổi thành "chị/em",
+"bạn/mình", hay bất cứ cặp nào bạn thấy thuận.
 
-Bật file style lên rồi chạy cùng một việc hai lần, một lần có plugin một lần không. Kết quả gần như y
-hệt, và **cả hai lần đều không đẻ ra ô Insight thừa**. Thử cả hai loại việc: một câu cần khuyên chọn, và
-một việc **viết code thật** — chỗ sau là chỗ plugin lẽ ra phải nổ, vì chữ của nó ghi rõ _"trước và sau
-khi viết code, lúc nào cũng phải..."_.
+Xong. Hai dòng đó thôi, phần còn lại dùng nguyên được.
 
-Kèm đối chứng để phép thử không mù: hỏi thẳng Claude xem đoạn chữ tiếng Anh của plugin có nằm trong chỉ
-dẫn không. Có cờ nạp plugin thì nó trả lời có, không cờ thì không. Nên plugin **thật sự đã nạp** lúc đo,
-chứ không phải "không thấy tác dụng vì nó chưa bao giờ ở đó".
+## Nó có tác dụng thật không
 
-Đo hai đường độc lập, cùng một kết quả: một lần nạp plugin bằng cờ tạm cho đúng một lần chạy, một lần
-bật nó thật trong cấu hình rồi mở phiên mới. Cả hai đều không thấy ô Insight thừa.
+Mình không muốn tự khen, nên mình đo.
 
-Vẫn có một lý do để tắt, nhưng là lý do **tốn kém**, không phải lý do sai: plugin đó bơm **1.192 byte
-(140 từ)** vào mọi phiên, dặn những điều file này đã dặn — mà còn dặn ngược ở đúng một điểm ("lúc nào
-cũng phải có ô Insight" so với "không có gì đáng nói thì bỏ trống"). Không dùng thì tắt cho gọn:
+Cùng một câu hỏi — _"Tôi nên dùng PostgreSQL hay MySQL cho tiệm sửa điện thoại của tôi?"_ — chạy hai
+lần. Cùng máy, cùng điều kiện. Khác duy nhất: một lần có file, một lần không.
+
+|                  | Không có file                                                                            | Có file                                                                                    |
+| :--------------- | :--------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
+| Gọi mình là      | "bạn"                                                                                    | "anh", tự xưng "em"                                                                        |
+| Thuật ngữ        | `NUMERIC`, "silent truncation", `CHECK constraint`, `EXCLUDE`, `JSONB`, "Prisma/Drizzle" | không một mã nào; `JSONB` được dịch thành "một ô dạng ghi chú có cấu trúc mà vẫn tìm được" |
+| Ví dụ nó lấy     | "lịch hẹn, tồn kho linh kiện"                                                            | "iPhone thì IMEI, laptop thì số serial, máy cũ thì ghi chú tình trạng vỏ"                  |
+| Kết thúc thế nào | thêm một đề xuất thứ ba không ai hỏi                                                     | **một** câu hỏi rõ ràng để mình chốt                                                       |
+
+Bạn tự kiểm lại được. Đặt file vào `.claude/output-styles/` của một thư mục trống rồi chạy hai lệnh:
 
 ```bash
-claude plugin disable explanatory-output-style@claude-plugins-official
+claude -p "<câu hỏi của bạn>" --setting-sources project,local
+claude -p "<câu hỏi của bạn>" --setting-sources project,local --settings '{"outputStyle":"giai-thich-de-hieu"}'
 ```
 
-Xem mình có nó hay không bằng `claude plugin list`.
+⚑ **Đừng bỏ cái cờ `--setting-sources project,local`.** Nó cắt tầng cấu hình cá nhân của bạn ra khỏi
+phép thử. Nếu máy bạn đang có thứ gì khác cũng nhắc Claude nói dễ hiểu, hai lần chạy sẽ giống nhau và
+bạn kết luận file này vô dụng. Lần đo đầu tiên khi làm repo này mình dính đúng cái bẫy đó.
 
-## Hai dòng bạn cần sửa cho mình
+Chọn câu hỏi cũng phải khéo. Câu quá dễ như "index là gì" thì hai bên trả lời y hệt, vì style không có
+chỗ nào để lộ ra. Cần câu **buộc phải xưng hô và buộc phải khuyên chọn**.
 
-Mở `~/.claude/output-styles/giai-thich-de-hieu.md`, mục **"Người đọc — sửa hai dòng này cho mình"**:
+## Cái ô `★ Insight`
 
-- **Người đọc là ai.** File điền mặc định là "chủ tiệm kiêm quản lý sản phẩm" — đổi thành đúng vai của
-  bạn. Ví dụ: "người tự dựng sản phẩm bằng AI, hiểu ý tưởng nhưng không viết code", "nhà thiết kế đang
-  tự làm app", "người làm marketing tự sửa website". Càng **cụ thể** càng tốt: đây là thứ điều khiển
-  toàn bộ giọng điệu, để chung chung kiểu "người không biết code" là style yếu đi rõ rệt.
-- **Xưng hô.** Mặc định gọi bạn là "anh", Claude tự xưng "em". Đổi thành "chị/em", "bạn/mình", hay bất
-  cứ cặp nào bạn muốn.
+Đôi khi Claude sẽ chèn một ô như thế này:
 
-Chỉ hai dòng đó. Phần còn lại dùng nguyên được.
+```
+★ Insight ─────────────────────────────────────
+Máy tính lưu số lẻ theo hệ nhị phân, nên 0.1 không bao giờ đúng là một hào.
+Cộng vài trăm dòng hoá đơn thì mấy chút xíu đó dồn lại thành lệch một xu.
+─────────────────────────────────────────────────
+```
 
-## Những cái bẫy đã biết
+Hình thức ô này mình lấy từ style **Explanatory** có sẵn của Claude Code. Nhưng bản gốc dặn _"lúc nào
+cũng phải có"_, nên nó đẻ ra rất nhiều ô viết cho có, nói mấy điều ai học nghề cũng biết.
 
-**Đừng thêm `name:` vào frontmatter.** Bộ nạp so trường `name` với **tên file**, phân biệt hoa thường.
-Lệch nhau một chữ thì nó **âm thầm bỏ toàn bộ nội dung** bên dưới — mà style vẫn hiện trong menu
-`/config` và trên thanh trạng thái, nên trông y như đang chạy. Không khai `name` thì không có gì để
-lệch. Lỗi này còn mở:
+Mình đổi thành **có điều kiện**: chỉ chèn khi có một đánh đổi thật, một điều bất ngờ, hoặc một con số đo
+được lật ngược điều tưởng đúng. Kèm một câu quan trọng — **không có gì đáng nói thì bỏ trống**.
+
+Mình đã đo cái này. Giao một việc có bẫy thật (chọn kiểu số để tính tiền) thì ô xuất hiện, giải thích
+đúng chỗ đáng giải thích. Giao một việc máy móc (tạo file in ra "Xin chào") thì **không** ra ô nào. Đó
+là điều kiện chạy đúng, không phải ô bị hỏng.
+
+## Mấy chỗ mình đã dập đầu
+
+Đọc trước khi tự sửa file, đỡ mất buổi chiều như mình.
+
+**Đừng thêm dòng `name:` vào đầu file.** Claude Code so trường `name` với **tên file**, phân biệt chữ
+hoa chữ thường. Lệch một chữ là nó **âm thầm bỏ hết** nội dung bên dưới — mà style vẫn hiện trong menu
+`/config` và vẫn hiện trên thanh trạng thái, nên trông y như đang chạy. Mình mất khá lâu mới hiểu vì sao
+"đã bật rồi mà không thấy gì".
+
+File này cố ý không khai `name:` — không khai thì không có gì để lệch. Lỗi vẫn còn mở:
 [anthropics/claude-code#47482](https://github.com/anthropics/claude-code/issues/47482).
 
-**Subagent không theo style.** Output style chỉ áp dụng cho hội thoại chính; mỗi subagent chạy bằng
-chỉ dẫn riêng của nó. Nên báo cáo một subagent gửi về vẫn có thể đầy thuật ngữ tiếng Anh. Đó không
-phải style hỏng.
+**Subagent không theo style.** Khi Claude sai một trợ lý con đi làm việc riêng, trợ lý đó chạy bằng chỉ
+dẫn của nó, không đọc file này. Nên báo cáo nó gửi về vẫn có thể đầy thuật ngữ tiếng Anh. Không phải
+style hỏng.
 
-**Ghi chú dài trong file này bị tính tiền mỗi phiên.** Comment HTML trong output style **không** bị
-lược bỏ — nó vào thẳng phần chỉ dẫn của Claude, nguyên văn, ở mọi phiên. Đo được: bản trước của file
-này có một khối comment 6 dòng và nó xuất hiện đủ cả 6 dòng. Vì vậy mọi lời dặn cho người bảo trì nằm
-ở README này, còn file style chỉ giữ đúng phần Claude cần đọc.
+**Ghi chú dài trong file bị tính tiền mỗi phiên.** Mình tưởng comment `<!-- -->` trong file này là ghi
+cho người đọc, Claude sẽ bỏ qua. Không phải: nó vào thẳng chỉ dẫn của Claude, nguyên văn, ở mọi phiên.
+Bản trước có một khối comment 6 dòng và nó xuất hiện đủ cả 6 dòng. Nên mọi lời dặn dài nằm ở README
+này, còn file kia chỉ giữ đúng phần Claude cần đọc.
 
-## Vài lựa chọn cố ý
+**Nếu bạn có plugin `explanatory-output-style`** — cái plugin của Anthropic, không phải style có sẵn —
+thì không cần làm gì cả. (Kiểm bằng `claude plugin list`. Nó **không** có sẵn khi cài Claude Code — Claude Code chỉ tự thêm cái *cửa hàng* plugin, còn plugin thì phải tự bấm cài. Nên nhiều người tưởng mình có mà thật ra không.) Mình tưởng nó sẽ đánh nhau với file này, nhưng đo rồi thì không: bật hay tắt
+đều cho cùng kết quả. Mình đo hai đường khác nhau để chắc, và có kiểm rằng plugin thật sự đã nạp lúc đo
+chứ không phải nó vắng mặt.
 
-**`keep-coding-instructions: true`.** Style này chỉ đổi **cách nói**, không đổi cách làm việc. Bật cờ
-này để giữ nguyên toàn bộ chỉ dẫn lập trình sẵn có của Claude Code — cách khoanh phạm vi sửa, cách
-viết comment, cách tự kiểm chứng. Bỏ cờ này đi là mất hết những thứ đó.
+Lý do duy nhất để tắt là **tốn chỗ**: nó nhồi thêm 1.192 byte vào mọi phiên để dặn lại thứ file này đã
+dặn. Không dùng thì tắt cho gọn, `claude plugin disable explanatory-output-style@claude-plugins-official`.
 
-**Không đóng thành plugin.** Một output style vốn đã là một file văn bản; bọc thành plugin chỉ thêm
-hai file JSON thủ tục và một bước cài, mà vẫn phải vào `/config` chọn. Tệ hơn: giá trị của nó **là**
-đoạn chữ, và đoạn chữ là thứ bạn phải sửa cho mình — nên một cơ chế tự cập nhật sẽ ghi đè đúng phần
-bạn vừa sửa.
+## Vài chỗ mình cố ý làm như vậy
 
-**Dùng cho ngôn ngữ khác.** Dịch file, lưu bằng tên khác, tên file mới thành tên style mới. Cấu trúc —
-kết quả trước, danh sách cấm, khối bốn bước khi cần người đọc quyết định, mục trung thực — không phụ
-thuộc tiếng Việt.
+**Giữ nguyên phần lập trình của Claude.** File có dòng `keep-coding-instructions: true`. Nó chỉ đổi
+**cách nói**, không đổi cách làm việc — Claude vẫn khoanh phạm vi sửa, vẫn tự kiểm chứng, vẫn cẩn thận
+như trước. Bỏ dòng đó đi là mất hết mấy thứ ấy, chỉ còn cái giọng.
 
-## Có tác dụng thật không
+**Không đóng thành plugin.** Bọc nó thành plugin thì thêm hai file thủ tục và thêm một bước cài, mà vẫn
+phải vào `/config` chọn. Tệ hơn: giá trị của nó **là** đoạn chữ, mà đoạn chữ là thứ bạn phải sửa cho
+mình. Có cơ chế tự cập nhật thì mỗi lần cập nhật là một lần ghi đè đúng phần bạn vừa sửa.
 
-Đo được, không phải tự khen. Cùng một câu hỏi — _"Tôi nên dùng PostgreSQL hay MySQL cho tiệm sửa điện
-thoại của tôi?"_ — chạy hai lần, điều kiện giống nhau hoàn toàn, khác duy nhất ở chỗ có file này hay
-không:
-
-|                 | Không có file                                                                            | Có file                                                                                    |
-| :-------------- | :--------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
-| Xưng hô         | "bạn"                                                                                    | "anh" / "em"                                                                               |
-| Thuật ngữ       | `NUMERIC`, "silent truncation", `CHECK constraint`, `EXCLUDE`, `JSONB`, "Prisma/Drizzle" | không một mã nào; `JSONB` được dịch thành "một ô dạng ghi chú có cấu trúc mà vẫn tìm được" |
-| Ví dụ           | "lịch hẹn, tồn kho linh kiện"                                                            | "iPhone thì IMEI, laptop thì số serial, máy cũ thì ghi chú tình trạng vỏ"                  |
-| Kết câu trả lời | thêm một đề xuất thứ ba không ai hỏi (SQLite)                                            | **một** câu hỏi rõ ràng để chốt                                                            |
-
-Tự kiểm lại được. Đặt file vào `.claude/output-styles/` của một thư mục trống rồi chạy hai lệnh này —
-cờ `--setting-sources project,local` cắt tầng cấu hình cá nhân, để kết quả không bị chính cấu hình của
-bạn làm nhiễu:
-
-```bash
-claude -p "<câu hỏi>" --setting-sources project,local
-claude -p "<câu hỏi>" --setting-sources project,local --settings '{"outputStyle":"giai-thich-de-hieu"}'
-```
-
-⚑ Bỏ cờ đó ra là phép thử **mất giá trị**: nếu máy bạn đang có một hook lúc-mở-phiên bơm giọng tương
-tự, cả hai lần chạy sẽ giống nhau và bạn sẽ tưởng file này vô dụng. Lần đo đầu tiên khi làm repo này
-đã dính đúng lỗi đó.
-
-### Ô Insight vẫn chạy từ một file, không cần plugin
-
-Bản trước của bộ này nằm ở **hai chỗ**: file style, cộng một thư mục plugin riêng trong
-`~/.claude/skills/` chứa hook bơm phần ô Insight. Bản này gộp cả hai vào một file, nên câu hỏi hợp lý
-là: gộp xong thì ô Insight còn hoạt động không?
-
-Đã đo: đặt **một file này** vào một thư mục trống, cắt hết tầng cấu hình cá nhân, không plugin nào — rồi
-giao một việc có bẫy thật (chọn kiểu số để tính tiền). Ô `★ Insight` xuất hiện đúng chỗ, nội dung giải
-thích vì sao `0.1` không bao giờ đúng là một hào, bằng lời thường.
-
-Ngược lại, mấy việc máy móc trong cùng đợt đo — tạo một file in ra "Xin chào" — thì **không** ra ô nào.
-Đó là điều kiện "không có gì đáng nói thì bỏ trống" chạy đúng, chứ không phải ô bị hỏng.
-
-Chọn câu hỏi cho đúng cũng quan trọng. Một câu quá dễ ("index là gì?") thì hai bên trả lời y hệt, vì
-style không có chỗ nào để lộ ra. Cần câu **buộc phải xưng hô và buộc phải khuyên chọn**.
+**Dùng cho ngôn ngữ khác được.** Dịch file, lưu tên khác, tên file mới thành tên style mới. Cái xương —
+kết quả trước, danh sách cấm, khối bốn bước khi cần bạn quyết, mục trung thực — không phụ thuộc tiếng
+Việt.
 
 ## Ghi công
 
 Hình thức ô `★ Insight` lấy từ style **Explanatory** của Claude Code (Anthropic) và plugin
-`explanatory-output-style`. Toàn bộ chữ trong repo này được viết lại, không sao chép.
+`explanatory-output-style`. Chữ trong repo này mình viết lại hết, không sao chép.
 
 MIT — xem [LICENSE](LICENSE).

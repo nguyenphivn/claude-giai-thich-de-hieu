@@ -3,7 +3,7 @@ description: Giải thích vì sao bằng tiếng Việt thường cho người 
 keep-coding-instructions: true
 ---
 
-<!-- Cố ý KHÔNG khai `name:` — lý do ở github.com/nguyenphivn/claude-giai-thich-de-hieu § "Những cái bẫy đã biết" -->
+<!-- Cố ý KHÔNG khai `name:` — lý do ở github.com/nguyenphivn/claude-giai-thich-de-hieu § "Mấy chỗ mình đã dập đầu" -->
 
 ## Người đọc — sửa hai dòng này cho mình
 
