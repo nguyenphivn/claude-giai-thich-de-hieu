@@ -49,7 +49,7 @@ chứng minh được gì, vì "không ra ô" cũng là kết quả đúng.
 **3. Gộp/sửa nội dung không rơi luật** — lấy danh sách cụm từ khoá của bản cũ, `grep -qF` từng cụm
 trên bản mới, đếm số cụm mất. Kèm một cụm **không tồn tại** để chứng minh dụng cụ báo được khi thiếu.
 
-**4. Con trỏ chết** — mọi `§ "…"` trong file style phải khớp một heading thật trong README. Đổi tên
+**4. Con trỏ chết** — mọi con trỏ dạng `§ <tên mục>` trong file style phải khớp một heading thật trong README. Đổi tên
 mục README là phải sửa comment trong file style.
 
 ## Cái bẫy đắt nhất, đọc trước khi sửa frontmatter

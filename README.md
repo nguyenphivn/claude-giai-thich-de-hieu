@@ -164,14 +164,6 @@ cho người đọc, Claude sẽ bỏ qua. Không phải: nó vào thẳng chỉ
 Bản trước có một khối comment 6 dòng và nó xuất hiện đủ cả 6 dòng. Nên mọi lời dặn dài nằm ở README
 này, còn file kia chỉ giữ đúng phần Claude cần đọc.
 
-**Nếu bạn có plugin `explanatory-output-style`** — cái plugin của Anthropic, không phải style có sẵn —
-thì không cần làm gì cả. (Kiểm bằng `claude plugin list`. Nó **không** có sẵn khi cài Claude Code — Claude Code chỉ tự thêm cái *cửa hàng* plugin, còn plugin thì phải tự bấm cài. Nên nhiều người tưởng mình có mà thật ra không.) Mình tưởng nó sẽ đánh nhau với file này, nhưng đo rồi thì không: bật hay tắt
-đều cho cùng kết quả. Mình đo hai đường khác nhau để chắc, và có kiểm rằng plugin thật sự đã nạp lúc đo
-chứ không phải nó vắng mặt.
-
-Lý do duy nhất để tắt là **tốn chỗ**: nó nhồi thêm 1.192 byte vào mọi phiên để dặn lại thứ file này đã
-dặn. Không dùng thì tắt cho gọn, `claude plugin disable explanatory-output-style@claude-plugins-official`.
-
 ## Vài chỗ mình cố ý làm như vậy
 
 **Giữ nguyên phần lập trình của Claude.** File có dòng `keep-coding-instructions: true`. Nó chỉ đổi
